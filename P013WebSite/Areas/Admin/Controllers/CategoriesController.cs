@@ -6,8 +6,8 @@ using P013WebSite.Entities;
 
 namespace P013WebSite.Areas.Admin.Controllers
 {
-	[Area("Admin")]
-	public class CategoriesController : Controller
+    [Area("Admin"), Authorize]
+    public class CategoriesController : Controller
     {
         
 

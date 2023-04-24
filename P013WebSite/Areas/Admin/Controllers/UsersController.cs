@@ -1,14 +1,25 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using P013WebSite.Data;
+using P013WebSite.Entities;
 
 namespace P013WebSite.Areas.Admin.Controllers
 {
-    [Area("Admin")]
+    [Area("Admin"), Authorize]
     public class UsersController : Controller
     {
+        private readonly DatabaseContext _context;
+
+        public UsersController(DatabaseContext context)
+        {
+            _context = context;
+        }
+
         // GET: UsersController
         public ActionResult Index()
         {
+
             return View();
         }
 
@@ -27,10 +38,12 @@ namespace P013WebSite.Areas.Admin.Controllers
         // POST: UsersController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create(User collection)
         {
             try
             {
+                await _context.Users.AddAsync(collection);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -42,16 +55,19 @@ namespace P013WebSite.Areas.Admin.Controllers
         // GET: UsersController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var model = _context.Users.Find(id);
+            return View(model);
         }
 
         // POST: UsersController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(int id, User collection)
         {
             try
             {
+                _context.Users.Update(collection);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -63,16 +79,19 @@ namespace P013WebSite.Areas.Admin.Controllers
         // GET: UsersController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            var model = _context.Users.Find(id);
+            return View(id);
         }
 
         // POST: UsersController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> Delete(int id, User collection)
         {
             try
             {
+                 _context.Users.Remove(collection);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             catch
