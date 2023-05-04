@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using P013WebSite.Data;
 using P013WebSite.Models;
 using System.Diagnostics;
 
@@ -6,16 +8,22 @@ namespace P013WebSite.Controllers
 {
 	public class HomeController : Controller
 	{
-		private readonly ILogger<HomeController> _logger;
+		private readonly DatabaseContext _databaseContext;
 
-		public HomeController(ILogger<HomeController> logger)
+		public HomeController(DatabaseContext databaseContext)
 		{
-			_logger = logger;
+			_databaseContext = databaseContext;
 		}
 
-		public IActionResult Index()
+		public async Task<IActionResult> IndexAsync()
 		{
-			return View();
+			var model = new HomePageViewModel()
+			{
+				Sliders = await _databaseContext.Slider.ToListAsync(),
+				Products = await _databaseContext.Products.Where(p => p.IsActive && p.IsHome).ToListAsync()
+			};
+
+			return View(model);
 		}
 
 		public IActionResult Privacy()

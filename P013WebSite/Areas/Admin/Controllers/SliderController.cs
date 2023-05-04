@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol;
@@ -8,7 +9,7 @@ using P013WebSite.Tools;
 
 namespace P013WebSite.Areas.Admin.Controllers
 {
-    [Area("Admin")]
+    [Area("Admin"), Authorize]
     public class SliderController : Controller
     {
         private readonly DatabaseContext _context; // S.O.L.I.D Prensipleri - Clean Code 

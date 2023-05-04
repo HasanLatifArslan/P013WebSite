@@ -23,6 +23,10 @@ namespace P013WebSite.Entities
 		public int CategoryId { get; set; }
 		[Display(Name = "Kategori")]
 		public Category? Category { get; set; }
+		[Display(Name = "Durum")]
+		public bool IsActive { get; set; }
+		[Display(Name = "Anasayfa")]
+		public bool IsHome { get; set; }
 		
 	}
 }
